@@ -1,5 +1,14 @@
 # gamepad-viewer
-Displays live status about gamepads connected to your computer
+Displays live status about gamepads connected to your computer.
+
+This is a fork of e7d's gamepad-viewer that I've modified
+to show two different colors for buttons depending on who
+is pressing them.
+
+This CodePen from Barrett Sonntag on retargeting SVG colors was super helpful: https://codepen.io/sosuke/pen/Pjoqqp
+
+This Stack Overflow article helped me find the CodePen and jdunning's comment about converting your SVG to 100% black before the rest of your filter also helped! https://codepen.io/sosuke/pen/Pjoqqp.
+
 
 ## Demo
 [gamepad.e7d.io](https://gamepad.e7d.io/)

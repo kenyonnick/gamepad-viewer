@@ -194,6 +194,14 @@
     width: 94px;
 }
 
+#gamepad .stick.p1 {
+    filter: brightness(0) saturate(100%) invert(32%) sepia(25%) saturate(4184%) hue-rotate(152deg) brightness(100%) contrast(103%);
+}
+
+#gamepad .stick.p2 {
+    filter: brightness(0) saturate(100%) invert(13%) sepia(81%) saturate(4884%) hue-rotate(293deg) brightness(77%) contrast(122%);
+}
+
 #gamepad .stick[data-pressed="true"].left {
     background-position-x: -96px;
 }
@@ -266,6 +274,24 @@
     background-position-y: 52px;
 }
 
+#gamepad .p1[data-pressed="true"] {
+    filter: brightness(0) saturate(100%) invert(84%) sepia(33%) saturate(3328%) hue-rotate(127deg) brightness(101%) contrast(104%);
+}
+
+#gamepad .p2[data-pressed="true"]{
+    filter: brightness(0) saturate(100%) invert(23%) sepia(99%) saturate(5509%) hue-rotate(297deg) brightness(117%) contrast(123%);
+}
+
 #gamepad.half {
     margin-top: -300px;
 }
+
+/* 
+.nicklas {
+    filter: brightness(0) saturate(100%) invert(84%) sepia(33%) saturate(3328%) hue-rotate(127deg) brightness(101%) contrast(104%);
+}
+
+.nicole {
+    filter: brightness(0) saturate(100%) invert(23%) sepia(99%) saturate(5509%) hue-rotate(297deg) brightness(117%) contrast(123%);
+} 
+*/
