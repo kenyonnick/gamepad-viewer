@@ -931,11 +931,13 @@ class Gamepad {
      */
     updateUrlParams(newParams) {
         const params = Object.assign(this.getUrlParams(), newParams);
-        const query = Object.entries(params)
+        const href = new URL(window.location.href);
+        Object.entries(params)
             .filter(([, value]) => value !== undefined)
-            .map(([key, value]) => `${key}=${value}`)
-            .join("&");
-        window.history.replaceState({}, document.title, `/?${query}`);
+            .forEach(([key, value]) => {
+                href.searchParams.set(key, value);
+            });
+        window.history.pushState({}, document.title, href.toString());
     }
 }
 
