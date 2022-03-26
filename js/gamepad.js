@@ -83,7 +83,8 @@ class Gamepad {
         // active gamepad default values
         this.scanDelay = 200;
         this.debug = false;
-        this.index = null;
+        this.gamepadIndex = null;
+        this.idealIndex = parseInt(this.getUrlParam("idealIndex"));
         this.disconnectedIndex = null;
         this.type = null;
         this.identifier = null;
@@ -162,7 +163,7 @@ class Gamepad {
      */
     displayInstructions() {
         // do not display help if we have an active gamepad
-        if (null !== this.index) return;
+        if (null !== this.gamepadIndex) return;
 
         // cancel the queued display of the instructions animation, if any
         window.clearTimeout(this.instructionsTimeout);
@@ -206,7 +207,7 @@ class Gamepad {
      * @param {GamepadEvent} e
      */
     onGamepadDisconnect(e) {
-        if (e.gamepad.index === this.index) {
+        if (e.gamepad.index === this.gamepadIndex) {
             // display a disconnection indicator
             this.$gamepad.addClass("disconnected");
             this.disconnectedIndex = e.gamepad.index;
@@ -321,7 +322,7 @@ class Gamepad {
      * Return the connected gamepad
      */
     getActive() {
-        return this.gamepads[this.index];
+        return this.gamepads[this.gamepadIndex];
     }
 
     /**
@@ -358,10 +359,14 @@ class Gamepad {
      */
     scan() {
         // don't scan if we have an active gamepad
-        if (null !== this.index && null === this.disconnectedIndex) return;
+        if (null !== this.gamepadIndex && null === this.disconnectedIndex) return;
 
         // refresh gamepad information
         this.pollGamepads();
+        if(this.idealIndex) {
+            this.map(this.idealIndex);
+            return;
+        }
 
         for (let index = 0; index < this.gamepads.length; index++) {
             if (
@@ -419,7 +424,7 @@ class Gamepad {
         this.$helpPopout.removeClass("active");
 
         // update local references
-        this.index = index;
+        this.gamepadIndex = index;
         this.disconnectedIndex = null;
         this.$gamepad.removeClass("disconnected");
         const gamepad = this.getActive();
@@ -428,7 +433,7 @@ class Gamepad {
         if (!gamepad) {
             // this mapping request was probably a mistake :
             // - remove the active gamepad index and reference
-            this.index = null;
+            this.gamepadIndex = null;
             // - enqueue a display of the instructions animation right away
             this.displayInstructions(true);
 
@@ -468,10 +473,10 @@ class Gamepad {
      */
     clear() {
         // ensure we have something to disconnect
-        if (this.index === null) return;
+        if (this.gamepadIndex === null) return;
 
         // clear associated data
-        this.index = null;
+        this.gamepadIndex = null;
         this.disconnectedIndex = null;
         this.debug = false;
         this.lastTimestamp = null;
@@ -542,7 +547,7 @@ class Gamepad {
      */
     pollStatus(force = false) {
         // ensure that a gamepad is currently active
-        if (this.index === null) return;
+        if (this.gamepadIndex === null) return;
 
         // enqueue the next refresh
         window.requestAnimationFrame(this.pollStatus.bind(this));
@@ -680,7 +685,7 @@ class Gamepad {
      */
     changeGamepadColor(color) {
         // ensure that a gamepad is currently active
-        if (this.index === null) return;
+        if (this.gamepadIndex === null) return;
 
         if ("undefined" === typeof color) {
             // no color was specified, load the next one in list
@@ -729,7 +734,7 @@ class Gamepad {
      */
     changeZoom(level) {
         // ensure that a gamepad is currently active
-        if (this.index === null) return;
+        if (this.gamepadIndex === null) return;
 
         // ensure we have some data to process
         if (typeof level === "undefined") return;
@@ -787,7 +792,7 @@ class Gamepad {
      */
     toggleGamepadType() {
         // ensure that a gamepad is currently active
-        if (this.index === null || this.type === null) return;
+        if (this.gamepadIndex === null || this.type === null) return;
 
         // toggle debug off
         this.debug = false;
@@ -815,7 +820,7 @@ class Gamepad {
         this.updateUrlParams({ type: this.type });
 
         // remap current gamepad
-        this.map(this.index);
+        this.map(this.gamepadIndex);
     }
 
     /**
@@ -823,7 +828,7 @@ class Gamepad {
      */
     toggleDebug() {
         // ensure that a gamepad is currently active
-        if (this.index === null) return;
+        if (this.gamepadIndex === null) return;
 
         // update debug value
         this.debug = !this.debug;
@@ -842,7 +847,7 @@ class Gamepad {
         this.updateUrlParams({ type: this.debug ? "debug" : undefined });
 
         // remap current gamepad
-        this.map(this.index);
+        this.map(this.gamepadIndex);
     }
 
     /**
